@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:newsapp/core/model/sources_response.dart' as sources;
 import 'package:newsapp/core/model/news_response.dart';
 import 'package:newsapp/core/repository/news/newsList_repo.dart';
 import 'package:newsapp/core/repository/news/newsList_repo_impl.dart';
@@ -14,7 +15,9 @@ class NewsController extends GetxController{
   var items =  ['Popular','Newest','Oldest'];
   RxList<NewsResponse> newsResponse;
   RxList<Article> articlesResponse;
+  RxList<sources.Source> sourceResponse;
   RxBool isLoading = false.obs;
+  RxBool isChecked = false.obs;
 
   @override
   void onInit() {
@@ -40,13 +43,21 @@ class NewsController extends GetxController{
     if(response!= null) {
       isLoading.toggle();
       articlesResponse = response.articles.obs;
-      print(isLoading);
-      print(articlesResponse.length);
-      print(articlesResponse);
     }
     else {
     List<NewsResponse> emptyList = List.empty(growable: true);
     newsResponse = emptyList;
+    }
+  }
+
+  getSourcesData() async {
+    isLoading.toggle();
+    final response = await _newsRepo.getSourcesAPI();
+    if(response!=null) {
+      isLoading.toggle();
+      sourceResponse = response.sources.obs;
+    } else {
+        // else part
     }
   }
 

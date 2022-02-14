@@ -87,8 +87,7 @@ class NewsView extends GetView<NewsController> {
                       delegate: SliverChildBuilderDelegate(
                     (context, index) {
                       return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
                         child: Container(
                           padding: const EdgeInsets.all(10.0),
                           decoration: BoxDecoration(
@@ -113,15 +112,11 @@ class NewsView extends GetView<NewsController> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      controller
-                                              .articlesResponse[index].author ??
-                                          "pravesh",
+                                      controller.articlesResponse[index].author ?? "",
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     Text(
-                                      controller
-                                              .articlesResponse[index].title ??
-                                          "pravesh",
+                                      controller.articlesResponse[index].title ?? "",
                                       style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),
@@ -136,9 +131,10 @@ class NewsView extends GetView<NewsController> {
                                 height: height * 0.15,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(12),
-                                  image: const DecorationImage(
-                                    image: NetworkImage(
-                                        "http://placehold.jp/150x150.png"),
+                                  image: DecorationImage(
+                                    image: controller.articlesResponse[index].urlToImage==null
+                                        ? const NetworkImage("http://placehold.jp/150x150.png")
+                                        : NetworkImage(controller.articlesResponse[index].urlToImage),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
@@ -149,9 +145,74 @@ class NewsView extends GetView<NewsController> {
                       );
                     },
                     childCount: controller.articlesResponse.length,
-                  )),
+                  ),
+                  ),
                 ],
               ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          controller.getSourcesData();
+          showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: const [
+                          Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Text("Filter by sources",
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Divider(
+                        height: 1.0,
+                        color: secondryColor2,
+                      ),
+                      Obx(()=> ListView.builder(
+                          itemCount: controller.sourceResponse.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                children: <Widget>[
+                                   CheckboxListTile(
+                                      activeColor: Colors.pink[300],
+                                      dense: true,
+                                      //font change
+                                      title:  Text(
+                                        controller.sourceResponse[index].name,
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w600,
+                                            letterSpacing: 0.5),
+                                      ),
+                                      value: controller.isChecked.value,
+                                      onChanged: (bool val) {
+                                        //itemChange(val, index);
+                                      }
+                                   ),
+                                ],
+                              ),
+                            );
+                          }
+                        ),
+                      ),
+                    ],
+                  );
+              }
+          );
+        },
+        backgroundColor: primaryColor1,
+        child: const Icon(Icons.filter_list_alt),
       ),
     );
   }

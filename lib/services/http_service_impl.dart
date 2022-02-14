@@ -24,4 +24,16 @@ class HttpServiceImpl implements HttpService {
     return response;
   }
 
+  @override
+  Future<Response> getSourcesRequest() async {
+    Response response;
+    try {
+      response = await _dio.get(URLConstant.topHeadlinesSources+ 'apiKey=ff322a77aa864d56b66a593d9042a4e5');
+    } on DioError catch (e) {
+      print(e.message);
+      throw Exception(e.message);
+    }
+    return response;
+  }
+
 }
