@@ -152,39 +152,45 @@ class NewsView extends GetView<NewsController> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          controller.getSourcesData();
+          //controller.getSourcesData();
           showModalBottomSheet(
               context: context,
               builder: (context) {
                 return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: const [
-                          Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: Text("Filter by sources",
-                              style: TextStyle(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Text("Filter by sources",
+                            style: TextStyle(
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.bold
-                              ),
                             ),
                           ),
-                        ],
-                      ),
-                      const Divider(
-                        height: 1.0,
-                        color: secondryColor2,
-                      ),
-                      Obx(()=> ListView.builder(
+                        ),
+                      ],
+                    ),
+                    const Divider(
+                      height: 1.0,
+                      color: secondryColor2,
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(5),
+                      height: 350,
+                      width: double.infinity,
+                      child: Obx(()=> ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
                           itemCount: controller.sourceResponse.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Container(
+                              //height: 600,
                               padding: const EdgeInsets.all(10.0),
                               child: Column(
                                 children: <Widget>[
-                                   CheckboxListTile(
+                                  CheckboxListTile(
                                       activeColor: Colors.pink[300],
                                       dense: true,
                                       //font change
@@ -195,19 +201,26 @@ class NewsView extends GetView<NewsController> {
                                             fontWeight: FontWeight.w600,
                                             letterSpacing: 0.5),
                                       ),
-                                      value: controller.isChecked.value,
+                                      value: controller.sourceResponse[index].isChecked,
                                       onChanged: (bool val) {
-                                        //itemChange(val, index);
+                                        if(val==true) {
+                                          controller.sourceResponse[index].isChecked=true;
+                                        }
+                                        else {
+                                          controller.sourceResponse[index].isChecked=false;
+                                        }
+                                        controller.sourceResponse.refresh();
                                       }
-                                   ),
+                                  ),
                                 ],
                               ),
                             );
                           }
                         ),
                       ),
-                    ],
-                  );
+                    ),
+                  ],
+                );
               }
           );
         },

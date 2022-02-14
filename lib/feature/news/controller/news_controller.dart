@@ -17,11 +17,12 @@ class NewsController extends GetxController{
   RxList<Article> articlesResponse;
   RxList<sources.Source> sourceResponse;
   RxBool isLoading = false.obs;
-  RxBool isChecked = false.obs;
+  RxBool isSourceLoading = false.obs;
 
   @override
   void onInit() {
     getCountryPublishedAtData();
+    getSourcesData();
     super.onInit();
   }
 
@@ -51,11 +52,14 @@ class NewsController extends GetxController{
   }
 
   getSourcesData() async {
-    isLoading.toggle();
+    isSourceLoading.toggle();
     final response = await _newsRepo.getSourcesAPI();
     if(response!=null) {
-      isLoading.toggle();
+      isSourceLoading.toggle();
       sourceResponse = response.sources.obs;
+      print("sourceResponse");
+      print(isSourceLoading);
+      print(sourceResponse[0].isChecked);
     } else {
         // else part
     }

@@ -37,6 +37,7 @@ class Source {
     this.category,
     this.language,
     this.country,
+    this.isChecked,
   });
 
   String id;
@@ -46,6 +47,7 @@ class Source {
   Category category;
   String language;
   String country;
+  bool isChecked;
 
   factory Source.fromJson(Map<String, dynamic> json) => Source(
     id: json["id"],
@@ -55,6 +57,7 @@ class Source {
     category: categoryValues.map[json["category"]],
     language: json["language"],
     country: json["country"],
+    isChecked: json["isChecked"]=false,
   );
 
   Map<String, dynamic> toJson() => {
@@ -65,6 +68,7 @@ class Source {
     "category": categoryValues.reverse[category],
     "language": language,
     "country": country,
+    "isChecked": isChecked,
   };
 }
 
