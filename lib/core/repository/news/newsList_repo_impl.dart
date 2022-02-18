@@ -18,10 +18,10 @@ class NewsRepoImpl implements NewsRepo {
 
 
   @override
-  Future<NewsResponse> getCountryPublishedAtListAPI() async {
+  Future<NewsResponse> getNewsListDataAPI() async {
     try
     {
-      final response = await _httpService.getCountryPublishedAtListRequest();
+      final response = await _httpService.getNewsListDataRequest();
       Map<String, dynamic> responseMap = Map.from(jsonDecode(response.toString()));
       return NewsResponse.fromJson(responseMap);
     } on Exception catch (e) {

@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 
 abstract class HttpService {
   void init();
-  Future<Response> getCountryPublishedAtListRequest() async {
+  Future<Response> getNewsListDataRequest() async {
     throw UnimplementedError();
   }
 

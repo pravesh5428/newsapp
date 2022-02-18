@@ -13,7 +13,7 @@ class HttpServiceImpl implements HttpService {
 
 
   @override
-  Future<Response> getCountryPublishedAtListRequest() async {
+  Future<Response> getNewsListDataRequest() async {
     Response response;
     try {
       response = await _dio.get(URLConstant.topheadlines + 'country=in&sortBy=publishedAt&apiKey=ff322a77aa864d56b66a593d9042a4e5');
