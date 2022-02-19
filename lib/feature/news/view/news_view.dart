@@ -65,14 +65,22 @@ class NewsView extends GetView<NewsController> {
                               color: secondryColor2,
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: const TextField(
-                              decoration: InputDecoration(
+                            child: TextField(
+                              decoration: const InputDecoration(
                                 hintStyle: TextStyle(fontSize: 17),
                                 hintText: 'Search for news, topics...',
                                 suffixIcon: Icon(Icons.search),
                                 border: InputBorder.none,
                                 contentPadding: EdgeInsets.all(18),
                               ),
+                              onChanged: (text) {
+                                //print('First text field: $text');
+                                controller.q.value = text;
+                                Future.delayed(const Duration(seconds: 2), () {
+                                  controller.getNewsListData();
+                                });
+
+                              }
                             ),
                           ),
                           const SizedBox(height: 15.0),
@@ -99,8 +107,9 @@ class NewsView extends GetView<NewsController> {
                                             value: items, child: Text(items));
                                       }).toList(),
                                       onChanged: (newValue) {
-                                        controller.dropdownvalue.value =
-                                            newValue.toString();
+                                        controller.dropdownvalue.value = newValue.toString();
+                                        controller.bySort.value = controller.dropdownvalue.value;
+                                        controller.getNewsListData();
                                       },
                                     ),
                                   )

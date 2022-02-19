@@ -4,6 +4,7 @@ import 'package:newsapp/core/model/sources_response.dart' as sources;
 import 'package:newsapp/core/model/news_response.dart';
 import 'package:newsapp/core/repository/news/newsList_repo.dart';
 import 'package:newsapp/core/repository/news/newsList_repo_impl.dart';
+import 'package:country_codes/country_codes.dart';
 
 class NewsController extends GetxController{
   NewsRepo _newsRepo;
@@ -26,6 +27,7 @@ class NewsController extends GetxController{
   RxString filterSources = "".obs;
   RxString bySort = "".obs;
   RxString q="".obs;
+  RxString subUrl = "".obs;
 
   List<CountryList> countryList = [
     CountryList(
@@ -67,7 +69,11 @@ class NewsController extends GetxController{
 
   @override
   void onInit() {
-    getNewsListData(iso,filterSources,dropdownvalue,q);
+    //CountryDetails details = CountryCodes.detailsForLocale();
+    //iso.value = details.alpha2Code;
+    //title.value = details.name;
+    bySort.value = dropdownvalue.value;
+    getNewsListData();
     getSourcesData();
     super.onInit();
   }
@@ -84,14 +90,40 @@ class NewsController extends GetxController{
     super.onClose();
   }
 
-  getNewsListData(country,source,sort,search) async {
-    if(sort=="Newest"){
-      bySort.value = "publishedAt";
-    } else if(sort=="Popular"){
-      bySort.value = "popularity";
-    } else if(sort=="Oldest"){
-      bySort.value = sort;
+
+  getNewsListData() async {
+
+    subUrl.value = 'country='+iso.value;
+
+    if(bySort.value!=''){
+      if(bySort.value=="Newest"){
+        bySort.value = "publishedAt";
+        subUrl.value+= '&sortBy='+bySort.value;
+      } else if(bySort.value=="Popular"){
+        bySort.value = "popularity";
+        subUrl.value+= '&sortBy='+bySort.value;
+      } else if(bySort.value=="Oldest"){
+        bySort.value = "from=2022-02-18&to=2022-02-18";
+        subUrl.value+= '&sortBy='+bySort.value;
+      }
     }
+
+    if(q.value!=''){
+      q.value = q.value;
+      subUrl.value+= '&q='+q.value;
+    }
+
+    if(filterSources.value!=''){
+      filterSources.value = filterSources.value;
+      subUrl.value+= '&sources='+q.value;
+    }
+
+    print("suburl"+subUrl.value);
+    print("iso.value"+iso.value);
+    print("bySort.value"+bySort.value);
+    print("filterSources.value"+filterSources.value);
+    print("q.value"+q.value);
+
     isLoading.toggle();
     final response = await _newsRepo.getNewsListDataAPI();
     if(response!= null) {
